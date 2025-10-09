@@ -1,5 +1,3 @@
-using System;
-
 namespace FirstTask
 {
     internal class Program
