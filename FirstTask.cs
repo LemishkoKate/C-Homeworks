@@ -1,6 +1,6 @@
 using System;
 
-namespace MatrixSumBetweenMinMax
+namespace FirstTask
 {
     internal class Program
     {
