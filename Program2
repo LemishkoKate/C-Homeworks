@@ -1,0 +1,34 @@
+namespace WarehouseApp
+{
+    public struct Employee
+    {
+        public string Name;
+        public int? Age;
+        public double? Salary;
+
+        public void ShowInfo()
+        {
+            Console.WriteLine("Name: " + Name);
+
+            if (Age.HasValue)
+            {
+                Console.WriteLine("Age: " + Age.Value);
+            }
+            else
+            {
+                Console.WriteLine("Age not provided");
+            }
+
+            if (Salary.HasValue)
+            {
+                Console.WriteLine("Salary: " + Salary.Value);
+            }
+            else
+            {
+                Console.WriteLine("Salary not provided");
+            }
+
+            Console.WriteLine();
+        }
+    }
+}
