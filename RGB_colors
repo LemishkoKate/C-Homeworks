@@ -1,0 +1,47 @@
+namespace RGB_colors
+{
+    class Program
+    {
+        public delegate void ColorDelegate(string color);
+
+        static void Main(string[] args)
+        {
+            ColorDelegate del = delegate (string color)
+            {
+                switch (color.ToLower())
+                {
+                    case "red":
+                        Console.WriteLine("RGB value of red: (255, 0, 0)");
+                        break;
+                    case "orange":
+                        Console.WriteLine("RGB value of orange: (255, 165, 0)");
+                        break;
+                    case "yellow":
+                        Console.WriteLine("RGB value of yellow: (255, 255, 0)");
+                        break;
+                    case "green":
+                        Console.WriteLine("RGB value of green: (0, 255, 0)");
+                        break;
+                    case "blue":
+                        Console.WriteLine("RGB value of blue: (0, 0, 255)");
+                        break;
+                    case "indigo":
+                        Console.WriteLine("RGB value of indigo: (75, 0, 130)");
+                        break;
+                    case "violet":
+                        Console.WriteLine("RGB value of violet: (238, 130, 238)");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid color!");
+                        break;
+                }
+            };
+
+            Console.WriteLine("Enter a rainbow color:");
+            string inputColor = Console.ReadLine();
+
+            del(inputColor);
+        }
+    }
+
+}
