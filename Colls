@@ -1,0 +1,82 @@
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace Colls
+{
+    internal class Program
+    {
+        //1
+        static T Max3<T>(T a, T b, T c) where T : IComparable<T>
+        {
+            T max = a;
+
+            if (b.CompareTo(max) > 0) max = b;
+            if (c.CompareTo(max) > 0) max = c;
+
+            return max;
+        }
+        //3 
+        class Apartment : IEnumerable<string>
+        {
+            public List<string> Residents = new List<string>();
+
+            public IEnumerator<string> GetEnumerator()
+            {
+                return Residents.GetEnumerator();
+            }
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+        class House : IEnumerable<Apartment>
+        {
+            public List<Apartment> Apartments = new List<Apartment>();
+
+            public IEnumerator<Apartment> GetEnumerator()
+            {
+                return Apartments.GetEnumerator();
+            }
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
+
+
+        static void Main(string[] args)
+        {
+//1
+            Console.WriteLine(Max3<int>(3, 7, 5));
+            Console.WriteLine(Max3<double>(2.5, 1.1, 9.9));
+            Console.WriteLine(Max3<string>("abc", "zzz", "bbb"));
+
+//2 я ваще не шарю як це сделать 
+//3
+            House house = new House();
+
+            Apartment a1 = new Apartment();
+            a1.Residents.Add("Kate");
+            a1.Residents.Add("Anna");
+
+            Apartment a2 = new Apartment();
+            a2.Residents.Add("Alex");
+
+            house.Apartments.Add(a1);
+            house.Apartments.Add(a2);
+
+            Console.WriteLine("House:");
+            foreach (Apartment apt in house)
+            {
+                Console.WriteLine("Flat:");
+
+                foreach (string person in apt)
+                Console.WriteLine("    " + person);
+            }
+        }
+    
+    }
+}
