@@ -1,0 +1,209 @@
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace Poems
+{
+    internal class Program
+    {
+        static string[] titles = new string[100];
+        static string[] authors = new string[100];
+        static int[] years = new int[100];
+        static string[] texts = new string[100];
+        static string[] topics = new string[100];
+        static int count = 0;
+
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                Console.WriteLine("1. Add");
+                Console.WriteLine("2. Delete");
+                Console.WriteLine("3. Edit");
+                Console.WriteLine("4. Search");
+                Console.WriteLine("5. Save");
+                Console.WriteLine("6. Load");
+                Console.WriteLine("7. Show all");
+                Console.WriteLine("0. Exit");
+
+                string c = Console.ReadLine();
+
+                if (c == "1") Add();
+                if (c == "2") Delete();
+                if (c == "3") Edit();
+                if (c == "4") Search();
+                if (c == "5") Save();
+                if (c == "6") Load();
+                if (c == "7") Show();
+                if (c == "0") break;
+            }
+
+            static void Add()
+            {
+                Console.Write("Title: ");
+                titles[count] = Console.ReadLine();
+
+                Console.Write("Author: ");
+                authors[count] = Console.ReadLine();
+
+                Console.Write("Year: ");
+                years[count] = int.Parse(Console.ReadLine());
+
+                Console.Write("Text: ");
+                texts[count] = Console.ReadLine();
+
+                Console.Write("Topic: ");
+                topics[count] = Console.ReadLine();
+
+                count++;
+                Console.WriteLine("Added!");
+            }
+
+            static void Delete()
+            {
+                Console.Write("Title to delete: ");
+                string name = Console.ReadLine();
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (titles[i] == name)
+                    {
+                        for (int j = i; j < count - 1; j++)
+                        {
+                            titles[j] = titles[j + 1];
+                            authors[j] = authors[j + 1];
+                            years[j] = years[j + 1];
+                            texts[j] = texts[j + 1];
+                            topics[j] = topics[j + 1];
+                        }
+                        count--;
+                        Console.WriteLine("Deleted!");
+                        return;
+                    }
+                }
+
+                Console.WriteLine("Not found!");
+            }
+
+            static void Edit()
+            {
+                Console.Write("Title to edit: ");
+                string name = Console.ReadLine();
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (titles[i] == name)
+                    {
+                        Console.Write("New title: ");
+                        titles[i] = Console.ReadLine();
+
+                        Console.Write("New author: ");
+                        authors[i] = Console.ReadLine();
+
+                        Console.Write("New year: ");
+                        years[i] = int.Parse(Console.ReadLine());
+
+                        Console.Write("New text: ");
+                        texts[i] = Console.ReadLine();
+
+                        Console.Write("New topic: ");
+                        topics[i] = Console.ReadLine();
+
+                        Console.WriteLine("Edited!");
+                        return;
+                    }
+                }
+                Console.WriteLine("Not found!");
+            }
+
+            static void Search()
+            {
+                Console.Write("Enter regex: ");
+                string reg = Console.ReadLine();
+                Regex r = new Regex(reg, RegexOptions.IgnoreCase);
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (r.IsMatch(titles[i]) ||
+                        r.IsMatch(authors[i]) ||
+                        r.IsMatch(texts[i]) ||
+                        r.IsMatch(topics[i]))
+                    {
+                        Console.WriteLine("\n----------------");
+                        Console.WriteLine("Title: " + titles[i]);
+                        Console.WriteLine("Author: " + authors[i]);
+                        Console.WriteLine("Year: " + years[i]);
+                        Console.WriteLine("Topic: " + topics[i]);
+                        Console.WriteLine("Text: " + texts[i]);
+                    }
+                }
+            }
+
+            static void Save()
+            {
+                using (FileStream fs = new FileStream("poems.txt", FileMode.Create))
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        string line = titles[i] + "|" +
+                                      authors[i] + "|" +
+                                      years[i] + "|" +
+                                      topics[i] + "|" +
+                                      texts[i].Replace("\n", "\\n");
+                        sw.WriteLine(line);
+                    }
+                }
+
+                Console.WriteLine("Saved!");
+            }
+
+            static void Load()
+            {
+                if (!File.Exists("poems.txt"))
+                {
+                    Console.WriteLine("File not found!");
+                    return;
+                }
+
+                count = 0;
+
+                using (FileStream fs = new FileStream("poems.txt", FileMode.Open))
+                using (StreamReader sr = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] p = line.Split('|');
+                        titles[count] = p[0];
+                        authors[count] = p[1];
+                        years[count] = int.Parse(p[2]);
+                        topics[count] = p[3];
+                        texts[count] = p[4].Replace("\\n", "\n");
+                        count++;
+                    }
+                }
+
+                Console.WriteLine("Loaded!");
+            }
+
+            static void Show()
+            {
+                if (count == 0)
+                {
+                    Console.WriteLine("Empty!");
+                    return;
+                }
+
+                for (int i = 0; i < count; i++)
+                {
+                    Console.WriteLine("\n----------------");
+                    Console.WriteLine("Title: " + titles[i]);
+                    Console.WriteLine("Author: " + authors[i]);
+                    Console.WriteLine("Year: " + years[i]);
+                    Console.WriteLine("Topic: " + topics[i]);
+                    Console.WriteLine("Text: " + texts[i]);
+                }
+            }
+        }
+    }
+}
